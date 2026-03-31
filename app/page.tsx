@@ -1,0 +1,1 @@
+export default function Home() { return (<main className="max-w-5xl mx-auto py-10 space-y-6"><h1 className="text-3xl font-semibold">Candidate – MVP</h1><p className="text-slate-600">Dashboard placeholder. À implémenter : profil, providers, offres, candidatures, documents.</p></main>); }

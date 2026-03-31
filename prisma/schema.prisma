@@ -1,0 +1,11 @@
+generator client { provider = "prisma-client-js" }
+datasource db { provider = "postgresql" url = env("DATABASE_URL") }
+model User { id String @id @default(cuid()) email String @unique passwordHash String name String? createdAt DateTime @default(now()) updatedAt DateTime @updatedAt profile Profile? providers ProviderKey[] applications Application[] documents Document[] }
+model Profile { id String @id @default(cuid()) userId String @unique user User @relation(fields: [userId], references: [id]) title String? location String? salaryMin Int? salaryMax Int? contractTypes String[] remote Boolean? yearsExp Int? skills String[] keywords String[] cvId String? coverId String? }
+model ProviderKey { id String @id @default(cuid()) userId String user User @relation(fields: [userId], references: [id]) provider String apiKeyEnc String config Json? createdAt DateTime @default(now()) updatedAt DateTime @updatedAt }
+model Offer { id String @id @default(cuid()) provider String externalId String @unique title String company String? location String? salary String? contract String? remote Boolean? url String description String raw Json? createdAt DateTime @default(now()) applications Application[] }
+model Application { id String @id @default(cuid()) userId String user User @relation(fields: [userId], references: [id]) offerId String offer Offer @relation(fields: [offerId], references: [id]) status ApplicationStatus @default(PENDING) mode ApplicationMode sentAt DateTime? cvId String? coverId String? generatedCvId String? generatedCoverId String? notes String? history Json? createdAt DateTime @default(now()) updatedAt DateTime @updatedAt }
+model Document { id String @id @default(cuid()) userId String user User @relation(fields: [userId], references: [id]) type DocumentType name String url String meta Json? createdAt DateTime @default(now()) }
+enum ApplicationStatus { PENDING SENT REVIEWING REJECTED ACCEPTED }
+enum ApplicationMode { AUTO SEMI MANUAL }
+enum DocumentType { CV COVER GENERATED_CV GENERATED_COVER }
