@@ -1,0 +1,5 @@
+export type SearchCriteria = { title?: string; location?: string; salaryMin?: number; salaryMax?: number; contractTypes?: string[]; remote?: boolean; yearsExp?: number; keywords?: string[]; };
+export type OfferDto = { provider: string; externalId: string; title: string; company?: string; location?: string; salary?: string; contract?: string; remote?: boolean; url: string; description: string; raw?: unknown; };
+export interface JobProvider { name: string; search(criteria: SearchCriteria, apiKey: string, config?: any): Promise<OfferDto[]>; }
+export class MockProvider implements JobProvider { name = "mock"; async search(criteria: SearchCriteria): Promise<OfferDto[]> { return [ { provider: this.name, externalId: "mock-1", title: criteria.title ?? "Développeur Fullstack", company: "ACME", location: criteria.location ?? "Remote", salary: "60-70k", contract: "CDI", remote: true, url: "https://example.com/offre", description: "Offre fictive pour MVP.", raw: criteria } ]; } }
+export function getProvider(name: string): JobProvider { if (name === "mock") return new MockProvider(); throw new Error(`Provider ${name} not implemented`); }
